@@ -326,18 +326,6 @@ func findGrantByTwoPartKeyWithRetry(ctx context.Context, conn *kms.KMS, keyID, g
 			return resource.NonRetryableError(err)
 		}
 
-		if principal := aws.StringValue(grant.GranteePrincipal); principal != "" {
-			if !arn.IsARN(principal) {
-				return resource.RetryableError(fmt.Errorf("grantee principal (%s) is invalid. Perhaps the principal has been deleted or recreated", principal))
-			}
-		}
-
-		if principal := aws.StringValue(grant.RetiringPrincipal); principal != "" {
-			if !arn.IsARN(principal) {
-				return resource.RetryableError(fmt.Errorf("retiring principal (%s) is invalid. Perhaps the principal has been deleted or recreated", principal))
-			}
-		}
-
 		output = grant
 
 		return nil
